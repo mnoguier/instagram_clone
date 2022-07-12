@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>insta485</title>
+
+    <!--One stylesheet to rule them all.-->
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" media="screen" /> 
+</head>
+
+<body>
+    
+    <!--This is the top navigation bar.-->
+    <nav>
+            <a href="/" id ="LinkToSamePage">"Link to /"</a>
+            <a href="/explore/" id ="LinkToExplore">"Link to Explore"</a>
+            <a href="{{'/users/'~logname~'/'}}" id ="LinkToAwdeorio">"{{logname}}"</a>
+    </nav>
+    <!--End of the top navigation bar.-->
+
+    <div>
+    <h2>{{logname}}</h2>
+    
+    <!-- DO NOT CHANGE THIS -->
+    <form action="/accounts/?target=delete" method="post" enctype="multipart/form-data">
+        <input type="submit" name="delete" value="confirm delete account"/>
+        <input type="hidden" name="operation" value="delete"/>
+    </form>
+        
+    </div>
+</body>
+
+</html>

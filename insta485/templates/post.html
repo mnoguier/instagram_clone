@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>insta485</title>
+</head>
+
+<body>
+    
+    <!--This is the top navigation bar.-->
+    <nav>
+            <a href="/" id ="LinkToSamePage">"Link to /"</a>
+            <a href="/explore/" id ="LinkToExplore">"Link to Explore"</a>
+            <a href="{{'/users/'~logname~'/'}}" id ="LinkToAwdeorio">"{{logname}}"</a>
+    </nav>
+    <!--End of the top navigation bar.-->
+
+    <div>
+        <a href="{{'/users/'~owner~'/'}}" class ="Username">
+                <img class = "ProfilePicture" src="{{'/uploads/'~profile_pic}}" alt = "ProfilePicture"
+                width ="75"
+                height="75"
+                />
+                {{owner}}
+        </a>
+        {% if logname == owner %}
+            <!-- Delete post button. -->
+            <form action="/posts/?target=/users/{{owner}}/" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="operation" value="delete"/>
+                <input type="hidden" name="postid" value="{{postid}}"/>
+                <input type="submit" name="delete" value="delete this post"/>
+            </form>
+            
+        {% endif %}
+        <br>
+            <a href="{{'/posts/'~postid~'/'}}" class ="Timestamp">{{created}}<br>
+                <img class = "PostPicture" src="{{'/uploads/'~filename}}" alt = "Post Picture"/>
+                </a><br>
+
+                {%if likes == 1%}
+                    1 like
+                {%else %}
+                    {{likes}} likes 
+                {% endif %}
+
+                {% if user_likes_post %}
+                    <!-- If the user likes the post, give unlike button -->
+                    <form action="{{'/likes/?target=/posts/'~postid~'/'}}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="operation" value="unlike"/>
+                        <input type="hidden" name="postid" value="{{postid}}"/>
+                        <input type="submit" name="unlike" value="unlike"/>
+                    </form>
+                {% else %}
+                    <!-- If the user dislikes the post, give like button -->
+                    <form action="{{'/likes/?target=/posts/'~postid~'/'}}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="operation" value="like"/>
+                        <input type="hidden" name="postid" value="{{postid}}"/>
+                        <input type="submit" name="like" value="like"/>
+                    </form>
+                {% endif %}
+                <br>
+                {% for comment in comments %}
+                    <a href="{{'/users/'~comment.owner~'/'}}" class ="Username">{{comment.owner}}</a> {{comment.text}}
+                    {%if logname == comment.owner%}
+                        <!-- Delete Comment Button -->
+                        <form action="{{'/comments/?target=/posts/'~postid~'/'}}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="operation" value="delete"/>
+                            <input type="hidden" name="commentid" value="{{comment.commentid}}"/>
+                            <input type="submit" name="uncomment" value="delete"/>
+                        </form>
+                    {% endif %}
+                    <br>
+                {% endfor %}
+                <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                <form action="{{'/comments/?target=/posts/'~postid~'/'}}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="operation" value="create"/>
+                    <input type="hidden" name="postid" value="{{postid}}"/>
+                    <input type="text" name="text" required/>
+                    <input type="submit" name="comment" value="comment"/>
+                </form>
+                  
+    </div>
+</body>
+
+</html>

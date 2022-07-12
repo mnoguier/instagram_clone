@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>insta485</title>
+</head>
+
+<body>
+
+    <!--This is the top navigation bar.-->
+    <nav>
+        <a href="/" id="LinkToSamePage">"Link to /"</a>
+        <a href="/explore/" id="LinkToExplore">"Link to Explore"</a>
+        <a href="{{'/users/'~logname~'/'}}" id="LinkToAwdeorio">"{{logname}}"</a>
+    </nav>
+    <!--End of the top navigation bar.-->
+
+    <div>
+        <a href="{{'/users/'~username~'/'}}">
+            <h2>{{username}}</h2>
+        </a>
+
+        {%if username == logname%}
+        <!--Link to /accounts/edit/ -->
+        <a href="/accounts/edit/">
+            <h2>Edit profile</h2>
+        </a>
+
+        <!-- Logout button Below-->
+        <form action="/accounts/logout/" method="post" enctype="multipart/form-data">
+            <input type="submit" name="logout" value="Logout" />
+        </form>
+        <br>
+        <!-- File upload form Below-->
+        <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+        <form action="/posts/?target=/users/{{username}}/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required />
+            <input type="submit" name="create_post" value="upload new post" />
+            <input type="hidden" name="operation" value="create" />
+        </form>
+        <br>
+        {% elif logname_follows_username%}
+        following
+
+        <!-- Unfollow Button Below -->
+        <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+        <form action="{{'/following/?target=/users/'~username~'/'}}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="unfollow" value="unfollow" />
+            <input type="hidden" name="username" value="{{username}}" />
+            <input type="hidden" name="operation" value="unfollow" />
+        </form>
+        {% else%}
+
+        <!-- Follow Button Below -->
+        <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+        <form action="{{'/following/?target=/users/'~username~'/'}}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="follow" value="follow" />
+            <input type="hidden" name="username" value="{{username}}" />
+            <input type="hidden" name="operation" value="follow" />
+        </form>
+        not following
+        {%endif%}
+        <br>
+        {%if posts_by_user == 1%}
+        {{posts_by_user~' post'}}
+        {%else%}
+        {{posts_by_user~' posts'}}
+        {%endif%}
+        <br>
+        <a href="{{'/users/'~username~'/followers/'}}">
+            {%if followers == 1%}
+            {{followers~' follower'}}
+            {%else%}
+            {{followers~' followers'}}
+            {%endif%}
+        </a>
+        <a href="{{'/users/'~username~'/following/'}}"> {{following~' following'}}</a>
+        <br><a href="{{'/users/'~username~'/'}}">{{fullname}}</a><br>
+
+
+
+
+        {% for post in posts %}
+        <a href="{{'/posts/'~post.postid~'/'}}" class="PostPicture">
+            <img src="{{'/uploads/'~post.filename}}" alt="Post Picture">
+        </a>
+        {% endfor %}
+
+    </div>
+</body>
+
+</html>

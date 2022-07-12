@@ -1,0 +1,133 @@
+#!/bin/bash
+# insta485db
+# Stop on errors
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+# Sanity check command line options
+
+
+################################################
+# This is the create function
+# you can call it by just typing "create_function" without quotes
+################################################
+create_function () {
+  
+    # check to see if there is already a database.
+    if [[ -f "var/insta485.sqlite3" ]]; then
+      echo "Error: database already exists"
+    else
+      # make the dir, copy over the sql, and copy over uploads
+      mkdir -p var/uploads
+      sqlite3 var/insta485.sqlite3 < sql/schema.sql
+      sqlite3 var/insta485.sqlite3 < sql/data.sql
+      cp sql/uploads/* var/uploads/
+    fi
+}
+
+
+################################################
+# This is the destory function
+# you can call it by just typing "destroy_function" without quotes
+################################################
+# NICK FILL THIS IN
+destroy_function () {
+    # Destroys database and user-created uploads dir
+    rm -rf var/insta485.sqlite3 var/uploads
+}
+
+
+################################################
+# This is the dump function
+# you can call it by just typing "dump_function" without quotes
+################################################
+# NICK FILL THIS IN
+dump_function () {
+    # Prints everything in the database
+    for table in $(sqlite3 var/insta485.sqlite3 .tables)
+    do
+      sqlite3 -batch -line var/insta485.sqlite3 'SELECT * FROM '$table''
+    done
+}
+
+################################################
+# This is the random function
+# you can call it by just typing "random" without quotes
+################################################
+random_function() {
+  SHUF=shuf
+  # If shuf is not on this machine, try to use gshuf instead
+  if ! type shuf 2> /dev/null; then
+    SHUF=gshuf
+  fi
+  DB_FILENAME=var/insta485.sqlite3
+  FILENAMES="122a7d27ca1d7420a1072f695d9290fad4501a41.jpg
+            ad7790405c539894d25ab8dcf0b79eed3341e109.jpg
+            9887e06812ef434d291e4936417d125cd594b38a.jpg
+            2ec7cf8ae158b3b1f40065abfb33e81143707842.jpg"
+  for i in `seq 1 100`; do
+    # echo $FILENAMES      print string
+    # shuf -n1             select one random line from multiline input
+    # awk '{$1=$1;print}'  trim leading and trailing whitespace
+    # Use '${SHUF}' instead of 'shuf'
+    FILENAME=`echo "$FILENAMES" | ${SHUF} -n1 | awk '{$1=$1;print}'`
+    OWNER="awdeorio"
+    sqlite3 -echo -batch ${DB_FILENAME} "INSERT INTO posts(filename, owner) VALUES('${FILENAME}','${OWNER}');"
+  done
+}
+
+usage() {
+  echo "Usage: $0 (create|destroy|reset|dump)"
+}
+if [ $# -ne 1 ]; then
+  usage
+  exit 1
+fi
+# Parse argument.  $1 is the first argument
+# Calling the script without arguments displays a usage message.
+case $1 in
+
+
+
+# ETHAN DOES THIS PART
+  "create")
+    create_function
+    ;;
+
+# The destroy argument removes the database. You might also
+#   want to remove user-created files like an uploads/ directory.
+# NICK DOES THIS PART
+  "destroy")
+    destroy_function
+    ;;
+
+# The reset argument does the same thing as destroy followed by create.
+# ETHAN DOES THIS PART
+  "reset")
+    destroy_function
+    create_function
+    ;;
+
+# The dump argument prints everything in the database. The exact format is up
+#   to you. Note to EECS 485 students: the autograder will only check for the 
+#   right data in the output, not the format.
+# NICK DOES THIS PART
+  "dump")
+    dump_function
+    ;;
+
+  "random")
+    random_function
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
+
+
+
+
+
+
+
+

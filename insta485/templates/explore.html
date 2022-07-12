@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>insta485</title>
+
+    <!--One stylesheet to rule them all.-->
+    <link rel="stylesheet" type="text/css" href="../../css/style.css" media="screen" />
+</head>
+
+<body>
+
+    <!--This is the top navigation bar.-->
+    <nav>
+        <a href="/" id="LinkToSamePage">"Link to /"</a>
+        <a href="/explore/" id="LinkToExplore">"Link to Explore"</a> |
+        <a href="{{'/users/'~logname~'/'}}" id="LinkToAwdeorio">"{{logname}}"</a>
+    </nav>
+    <!--End of the top navigation bar.-->
+
+    <div>
+        <h2>Discover People</h2>
+        {% for user in users %}
+        <a href="{{'/users/'~user.username~'/'}}" class="ProfilePicture">
+            <img src="{{'/uploads/'~user.profile_pic}}" alt="ProfilePicture">
+            {{user.username~' '}}
+        </a>
+        <form action="/following/?target=/explore/" method="post" enctype="multipart/form-data">
+            <input type="submit" name="follow" value="follow" />
+            <input type="hidden" name="username" value="{{user.username}}" />
+            <input type="hidden" name="operation" value="follow" />
+        </form>
+        {% endfor %}
+
+    </div>
+    
+</body>
+
+</html>

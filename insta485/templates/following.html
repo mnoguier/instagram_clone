@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="utf-8">
+    <title>insta485</title>
+</head>
+
+<body>
+    
+    <!--This is the top navigation bar.-->
+    <nav>
+            <a href="/" id ="LinkToSamePage">"Link to /"</a>
+            <a href="/explore/" id ="LinkToExplore">"Link to Explore"</a>
+            <a href="{{'/users/'~logname~'/'}}" id ="LinkToAwdeorio">"{{logname}}"</a>
+    </nav>
+    <!--End of the top navigation bar.-->
+
+    <div>
+    <!--<a href = "'/users/'~logname~'/'">{{logname}}</a>-->  
+    <h2>Following</h2>
+    
+    {% for follower in following %}
+        <a href="{{'/users/'~follower.username2~'/'}}"  class ="ProfilePicture">{{follower.username2~' '}}</a>
+            <img src = "{{'/uploads/'~follower.profile_pic}}" alt = "ProfilePicture" 
+            width = 75 height = 75> 
+                
+                <!-- Unfollow button below -->
+                {%if (logname != follower.username2) and (follower.logname_follows) %}
+                following 
+                <form action="{{'/following/?target=/users/'~owner~'/following'}}" method="post" enctype="multipart/form-data">
+                    <input type="submit" name="unfollow" value="unfollow"/>
+                    <input type="hidden" name="username" value="{{follower.username2}}"/>
+                    <input type="hidden" name="operation" value="unfollow"/>
+                </form>
+                {%elif logname != follower.username2 and not follower.logname_follows %}
+                not following
+                    <!-- Follow button-->
+                    <form action="{{'/following/?target=/users/'~owner~'/following/'}}" method="post" enctype="multipart/form-data">
+                        <input type="submit" name="follow" value="follow"/>
+                        <input type="hidden" name="username" value="{{follower.username2}}"/>
+                        <input type="hidden" name="operation" value="follow"/>
+                    </form>
+                {%endif%}
+            <br>
+        
+        {% endfor %}
+       
+    </div>
+</body>
+
+</html>

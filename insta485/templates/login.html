@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insta485</title>
+</head>
+
+<body>
+  <h2>
+    <a href="/">Insta485</a>
+
+    <a href="/accounts/login/">login</a>
+
+  </h2>
+  <hr>
+  <form action="/accounts/?target=/" method="post" enctype="multipart/form-data">
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
+    <input type="submit" value="login" />
+    <input type="hidden" name="operation" value="login" />
+  </form>
+  <p>
+    Don't have an account? <a href="/accounts/create/">Sign Up</a>
+
+  </p>
+</body>
+
+</html>
